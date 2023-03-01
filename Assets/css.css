@@ -1,0 +1,45 @@
+body {
+  background-image: linear-gradient(
+    to right top,
+    #d16ba5,
+    #ea7882,
+    #e89268,
+    #d4b064,
+    #b5cb7c,
+    #a3d792,
+    #90e2ac,
+    #7decc9,
+    #76f0d3,
+    #6ff4dc,
+    #67f7e7,
+    #5ffbf1
+  );
+  height: 100vh;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+p {
+  text-align: wrap;
+  font-size: large;
+}
+
+h1 {
+  font-size: 50px;
+  display: flex;
+  justify-content: center;
+}
+
+button {
+  font-size: 30px;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+  flex-wrap: wrap;
+  top: 300px;
+}
