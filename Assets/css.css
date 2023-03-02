@@ -30,11 +30,21 @@ h1 {
   justify-content: center;
 }
 
-button {
+#start-button {
   font-size: 30px;
 }
 
-.container {
+.score-button {
+  font-size: 30px;
+}
+
+header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.start-container {
   display: flex;
   justify-content: center;
   align-items: center;
