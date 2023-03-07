@@ -16,7 +16,7 @@ let answerButtons = document.querySelectorAll("btn");
 
 let shuffledQuestions, currentQuestionsIndex;
 var time = 60;
-let score = 0; //start my score with 0
+let playerScore = 0; //start my score with 0
 
 let countdown = function () {
   //here is my countdown function that sets my time
@@ -41,7 +41,7 @@ function startQuiz() {
   currentQuestionsIndex = 0; //starting at the first question in our shuffledQuestionsArray
   setNextQuestion(); //calls the function that displays my next question
   countdown(); //call my timer to execute
-  form();
+  clearPage();
 }
 
 function setNextQuestion() {
@@ -90,7 +90,7 @@ function selectAnswer(e) {
     time -= 10;
     timer.textContent = time;
   } else {
-    score += 10;
+    playerScore += 10;
   }
 }
 
@@ -185,15 +185,70 @@ nextBtn.addEventListener("click", () => {
   setNextQuestion(); //also sets the next question
 });
 
-let form = function (e) {
+let clearPage = function (e) {
   nextBtn.addEventListener("click", function () {
     //how can I call my last button?
     if (shuffledQuestions.length === currentQuestionsIndex + 1) {
       //only shows 4 of my questions, how do I get it to show my last one question??
       questionContainer.remove();
+      setForm();
+      time=0;
     }
   });
+
+
+var br = document.createElement("br");
+let setForm=function(){
+
+  let newDiv=document.createElement("div")
+
+  newDiv.setAttribute("class", "formDiv");
+
+  body.appendChild(newDiv);
+
+  let highScore=document.createElement("h1");
+  highScore.setAttribute("id", "score-text")
+  let score=document.createElement("span") //this is where I will get my score to show up when I find a way to keep score
+
+ newDiv.appendChild(highScore);
+ newDiv.appendChild(br.cloneNode());
+ newDiv.appendChild(score);
+ newDiv.appendChild(br.cloneNode());
+  highScore.textContent="Your score was:"
+score.setAttribute("id", "score-span")
+score.textContent= playerScore;
+
+  let form=document.createElement("FORM");
+
+  newDiv.appendChild(form);
+
+  let nameInput=document.createElement("label")
+  let type=document.createElement("input");
+  let submitButton=document.createElement("input");
+
+  
+  form.appendChild(nameInput);
+  form.appendChild(type);
+  newDiv.appendChild(br.cloneNode());
+  form.appendChild(submitButton);
+
+  nameInput.setAttribute("for", "initials");
+  submitButton.setAttribute("type", "submit");
+  submitButton.setAttribute("value", "Submit");
+  type.setAttribute("for", "text");
+
+  nameInput.textContent="Enter Your Initials "
+}
+
 };
+
+//QUESTIONS TO ASK TUTOR
+
+//1. How can I get all my questions to show?, currently only 4 show before clearing
+//2. How can I set up local storage to keep my score count and players initial after they submit
+//3. How to make HighScores be clickabel to show stored scores 
+
+
 //FIRST ATTEMPT CODE
 
 // let quiz = function () {
