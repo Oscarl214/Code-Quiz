@@ -5,15 +5,18 @@ let startBtn = document.getElementById("start-button"); //here I selected my sta
 let nextBtn = document.getElementById("next-btn");
 let questionEL = document.getElementById("question"); //selected my question div
 let answerBtnEL = document.getElementById("answer-buttons"); //selected my answer buttons
+// let submitButton = document.getElementById("submit"); //select my submit button
 let timer = document.querySelector(".time"); //here I selected my time element
 let body = document.querySelector("body");
-let title = document.querySelector("h1");
-let rules = document.querySelector("p");
+let title = document.querySelector("h1"); //here I selected my h1
+let rules = document.querySelector("p"); //here I selected my p
+let container = document.querySelector("container");
 
 let answerButtons = document.querySelectorAll("btn");
 
 let shuffledQuestions, currentQuestionsIndex;
 var time = 60;
+let score = 0; //start my score with 0
 
 let countdown = function () {
   //here is my countdown function that sets my time
@@ -38,6 +41,7 @@ function startQuiz() {
   currentQuestionsIndex = 0; //starting at the first question in our shuffledQuestionsArray
   setNextQuestion(); //calls the function that displays my next question
   countdown(); //call my timer to execute
+  form();
 }
 
 function setNextQuestion() {
@@ -76,14 +80,17 @@ function selectAnswer(e) {
     nextBtn.classList.remove("hide"); //if so show the next Btn
   } else {
     //if not than change the startBtn to restart and remove the hide class which makes it appear
-    startBtn.innerText = "Restart";
+    startBtn.innerText = "Submit";
     startBtn.classList.remove("hide");
+    time = 0;
   }
 
   if (!correct) {
     //if the answer clicked that is not correct than it decreases the time by ten seconds on the countdown
     time -= 10;
     timer.textContent = time;
+  } else {
+    score += 10;
   }
 }
 
@@ -178,6 +185,15 @@ nextBtn.addEventListener("click", () => {
   setNextQuestion(); //also sets the next question
 });
 
+let form = function (e) {
+  nextBtn.addEventListener("click", function () {
+    //how can I call my last button?
+    if (shuffledQuestions.length === currentQuestionsIndex + 1) {
+      //only shows 4 of my questions, how do I get it to show my last one question??
+      questionContainer.remove();
+    }
+  });
+};
 //FIRST ATTEMPT CODE
 
 // let quiz = function () {
