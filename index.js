@@ -1,5 +1,5 @@
 let header = document.querySelector("header"); //here I selected my header element
-let home = document.getElementById("start-container"); //here I selected my start container
+let home = document.getElementsByClassName("start-container"); //here I selected my start container
 let questionContainer = document.getElementById("question-container"); // here I selected my question container
 let startBtn = document.getElementById("start-button"); //here I selected my start button element
 let nextBtn = document.getElementById("next-btn");
@@ -10,7 +10,7 @@ let timer = document.querySelector(".time"); //here I selected my time element
 let body = document.querySelector("body");
 let title = document.querySelector("h1"); //here I selected my h1
 let rules = document.querySelector("p"); //here I selected my p
-let container = document.querySelector("container");
+let container = document.querySelector(".container");
 
 let answerButtons = document.querySelectorAll("btn");
 
@@ -41,7 +41,7 @@ function startQuiz() {
   currentQuestionsIndex = 0; //starting at the first question in our shuffledQuestionsArray
   setNextQuestion(); //calls the function that displays my next question
   countdown(); //call my timer to execute
-  clearPage();
+  setForm();
 }
 
 function setNextQuestion() {
@@ -75,14 +75,18 @@ function selectAnswer(e) {
   Array.from(answerBtnEL.children).forEach((button) => {
     setStatusClass(button, button.dataset.correct);
   });
-  if (shuffledQuestions.length > currentQuestionsIndex + 1) {
+  console.log(currentQuestionsIndex);
+  if (currentQuestionsIndex + 1 < shuffledQuestions.length) {
     //checks if we have more questions than the one we are on
     nextBtn.classList.remove("hide"); //if so show the next Btn
   } else {
     //if not than change the startBtn to restart and remove the hide class which makes it appear
-    startBtn.innerText = "Submit";
-    startBtn.classList.remove("hide");
+    // startBtn.innerText = "Submit";
+    // startBtn.classList.remove("hide");
     time = 0;
+    questionContainer.classList.add("hide");
+    document.querySelector("#form-container").classList.remove("hide");
+    console.log("Hello");
   }
 
   if (!correct) {
@@ -136,6 +140,99 @@ function handleAnswerClick(event) {
   }, 500);
 }
 
+var br = document.createElement("br");
+let score = document.createElement("span");
+
+let setForm = function () {
+  console.log("setForm");
+  let newDiv = document.createElement("div");
+
+  newDiv.setAttribute("id", "formDiv");
+
+  let highScore = document.createElement("h1");
+  highScore.setAttribute("id", "score-text");
+  //this is where I will get my score to show up when I find a way to keep score
+
+  newDiv.append(highScore);
+  newDiv.append(br.cloneNode());
+  newDiv.append(score);
+  newDiv.append(br.cloneNode());
+  highScore.textContent = "Your score was:";
+  score.setAttribute("id", "score-span");
+  score.textContent = playerScore;
+
+  let form = document.createElement("form");
+  form.setAttribute("id", "form-input");
+  newDiv.append(form);
+
+  let nameInput = document.createElement("label");
+  let type = document.createElement("input");
+  let submitButton = document.createElement("input");
+
+  form.append(nameInput);
+  form.append(type);
+  newDiv.append(br.cloneNode());
+  form.append(submitButton);
+
+  nameInput.setAttribute("for", "initials");
+
+  submitButton.setAttribute("type", "submit");
+  submitButton.setAttribute("value", "Submit");
+  type.setAttribute("for", "text");
+  type.setAttribute("id", "initials");
+
+  nameInput.textContent = "Enter Your Initials ";
+  document.querySelector("#form-container").append(newDiv);
+};
+
+//Setting up local storage
+
+const form = document.getElementById("form-container");
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const initials = document.getElementById("initials").value;
+  const playerScore = document.getElementById("score-span").textContent;
+  const scoreObj = { initials, playerScore };
+  console.log(scoreObj);
+  let scores = JSON.parse(localStorage.getItem("scores")) || [];
+
+  scores.push(scoreObj);
+
+  localStorage.setItem("scores", JSON.stringify(scores));
+
+  scores.forEach((score) => {
+    const scoreList = document.createElement("ul");
+    scoreList.textContent = `${score.initials}: ${score.playerScore}`;
+    document.getElementById("scores-list").appendChild(scoreList);
+    document.getElementById("scores-list").classList.remove("hide");
+  });
+
+  form.classList.add("hide");
+
+  let restartBtn = document.createElement("button");
+  document.getElementById("scores-list").appendChild(restartBtn);
+  restartBtn.textContent = "Restart Quiz";
+  restartBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    resetQuiz();
+  });
+});
+
+function resetQuiz() {
+  shuffledQuestions = null;
+  currentQuestionsIndex = 0;
+  playerScore = 0;
+  time = 60;
+  // clearInterval(timeInterval);
+  startBtn.classList.remove("hide"); //I add the hide class to my start Btn, to have it not show once the quiz starts
+  title.classList.remove("hide"); // Do the same for my h1 tag
+  rules.classList.remove("hide"); //Do the same for my p tag
+  document.getElementById("scores-list").classList.add("hide");
+  document.getElementById("formDiv").remove();
+  resetState();
+}
+
+//TODO: HOW DO I GET MY SCORES TO SHOW ONLY ONCE WHEN I RESET+
 const questions = [
   //my questions array with objects for each index, did this to be able to seperate my questions and answer choices, I add a boolean value to each answer choice to know which one is right or wrong
   {
@@ -179,75 +276,19 @@ const questions = [
     ],
   },
 ];
+
 startBtn.addEventListener("click", startQuiz);
 nextBtn.addEventListener("click", () => {
   currentQuestionsIndex++; //increments to next question
+  score.textContent = playerScore;
   setNextQuestion(); //also sets the next question
 });
 
-let clearPage = function (e) {
-  nextBtn.addEventListener("click", function () {
-    //how can I call my last button?
-    if (shuffledQuestions.length === currentQuestionsIndex + 1) {
-      //only shows 4 of my questions, how do I get it to show my last one question??
-      questionContainer.remove();
-      setForm();
-      time=0;
-    }
-  });
-
-
-var br = document.createElement("br");
-let setForm=function(){
-
-  let newDiv=document.createElement("div")
-
-  newDiv.setAttribute("class", "formDiv");
-
-  body.appendChild(newDiv);
-
-  let highScore=document.createElement("h1");
-  highScore.setAttribute("id", "score-text")
-  let score=document.createElement("span") //this is where I will get my score to show up when I find a way to keep score
-
- newDiv.appendChild(highScore);
- newDiv.appendChild(br.cloneNode());
- newDiv.appendChild(score);
- newDiv.appendChild(br.cloneNode());
-  highScore.textContent="Your score was:"
-score.setAttribute("id", "score-span")
-score.textContent= playerScore;
-
-  let form=document.createElement("FORM");
-
-  newDiv.appendChild(form);
-
-  let nameInput=document.createElement("label")
-  let type=document.createElement("input");
-  let submitButton=document.createElement("input");
-
-  
-  form.appendChild(nameInput);
-  form.appendChild(type);
-  newDiv.appendChild(br.cloneNode());
-  form.appendChild(submitButton);
-
-  nameInput.setAttribute("for", "initials");
-  submitButton.setAttribute("type", "submit");
-  submitButton.setAttribute("value", "Submit");
-  type.setAttribute("for", "text");
-
-  nameInput.textContent="Enter Your Initials "
-}
-
-};
-
 //QUESTIONS TO ASK TUTOR
 
-//1. How can I get all my questions to show?, currently only 4 show before clearing
+//1. How can I get all my questions to show?, currently only 4 show before clearing, DONE
 //2. How can I set up local storage to keep my score count and players initial after they submit
-//3. How to make HighScores be clickabel to show stored scores 
-
+//3. How to make HighScores be clickabel to show stored scores
 
 //FIRST ATTEMPT CODE
 
