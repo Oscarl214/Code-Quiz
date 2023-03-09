@@ -24,7 +24,7 @@ let countdown = function () {
     if (time >= 0) {
       timer.textContent = time;
       time--;
-    } else if (time === 0) {
+    } else {
       timer.textContent = "Game is Over, Try Again";
       clearInterval(timeInterval);
     }
@@ -188,6 +188,7 @@ let setForm = function () {
 //Setting up local storage
 
 const form = document.getElementById("form-container");
+
 form.addEventListener("submit", (e) => {
   e.preventDefault();
   const initials = document.getElementById("initials").value;
@@ -202,20 +203,20 @@ form.addEventListener("submit", (e) => {
 
   scores.forEach((score) => {
     const scoreList = document.createElement("ul");
+    scoreList.setAttribute("id", "score-list");
     scoreList.textContent = `${score.initials}: ${score.playerScore}`;
     document.getElementById("scores-list").appendChild(scoreList);
     document.getElementById("scores-list").classList.remove("hide");
   });
-
   form.classList.add("hide");
+});
 
-  let restartBtn = document.createElement("button");
-  document.getElementById("scores-list").appendChild(restartBtn);
-  restartBtn.textContent = "Restart Quiz";
-  restartBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    resetQuiz();
-  });
+let restartBtn = document.createElement("button");
+document.getElementById("scores-list").appendChild(restartBtn);
+restartBtn.textContent = "Restart Quiz";
+restartBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  resetQuiz();
 });
 
 function resetQuiz() {
@@ -227,12 +228,21 @@ function resetQuiz() {
   startBtn.classList.remove("hide"); //I add the hide class to my start Btn, to have it not show once the quiz starts
   title.classList.remove("hide"); // Do the same for my h1 tag
   rules.classList.remove("hide"); //Do the same for my p tag
-  document.getElementById("scores-list").classList.add("hide");
+  document.getElementById("scores-list").textContent = "";
   document.getElementById("formDiv").remove();
   resetState();
 }
 
-//TODO: HOW DO I GET MY SCORES TO SHOW ONLY ONCE WHEN I RESET+
+let highScores = document.getElementById("high-scores");
+
+highScores.addEventListener("click", function () {
+  startBtn.classList.add("hide"); //I add the hide class to my start Btn, to have it not show once the quiz starts
+  title.classList.add("hide"); // Do the same for my h1 tag
+  rules.classList.add("hide"); //Do the same for my p tag
+  document.getElementById("scores-list").classList.remove("hide");
+  console.log("HighScores was clicked");
+});
+
 const questions = [
   //my questions array with objects for each index, did this to be able to seperate my questions and answer choices, I add a boolean value to each answer choice to know which one is right or wrong
   {
