@@ -22,6 +22,8 @@ Once submited , the user is prompted with a restart Quiz button.
 
 ## Preview
 
+![] (https://github.com/Oscarl214/Code-Quiz/blob/main/Assets/ezgif.com-video-to-gif.gif)
+
 
 
 ## Deployed Links
